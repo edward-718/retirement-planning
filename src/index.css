@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Noto Sans SC', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #134e4a;
+  background-color: #fffbeb;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fffbeb 0%, #f0fdfa 50%, #fef7ed 100%);
+}
+
+.font-serif {
+  font-family: 'Noto Serif SC', Georgia, serif;
+}
+
+@layer components {
+  .card {
+    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-white/50 transition-all duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-xl transform -translate-y-1;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-teal-600 to-teal-700 text-white rounded-full font-medium shadow-lg hover:shadow-xl hover:from-teal-700 hover:to-teal-800 transition-all duration-300 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white text-teal-700 border-2 border-teal-600 rounded-full font-medium hover:bg-teal-50 transition-all duration-300 active:scale-95;
+  }
+
+  .btn-gold {
+    @apply px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-full font-medium shadow-lg hover:shadow-xl hover:from-gold-600 hover:to-gold-700 transition-all duration-300 active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 border-2 border-teal-100 rounded-xl bg-white focus:border-teal-500 focus:outline-none transition-colors duration-200 text-teal-900 placeholder-teal-300;
+  }
+
+  .select-field {
+    @apply w-full px-4 py-3 border-2 border-teal-100 rounded-xl bg-white focus:border-teal-500 focus:outline-none transition-colors duration-200 text-teal-900 cursor-pointer;
+  }
+
+  .label-text {
+    @apply block text-sm font-medium text-teal-800 mb-2;
+  }
+}
+
+.animate-stagger-1 { animation-delay: 0.1s; }
+.animate-stagger-2 { animation-delay: 0.2s; }
+.animate-stagger-3 { animation-delay: 0.3s; }
+.animate-stagger-4 { animation-delay: 0.4s; }
+.animate-stagger-5 { animation-delay: 0.5s; }
+.animate-stagger-6 { animation-delay: 0.6s; }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f0fdfa;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #5eead4;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}
