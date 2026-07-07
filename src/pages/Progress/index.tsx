@@ -155,8 +155,16 @@ export default function Progress() {
                 key={milestone.id}
                 className={`card p-5 relative overflow-hidden transition-all duration-300 ${
                   milestone.status === 'completed' ? 'opacity-90' : ''
-                } ${isCelebrating ? 'animate-bounce-in scale-105' : ''}`}
+                } ${isCelebrating ? 'animate-bounce-in scale-105' : ''} ${
+                  milestone.status === 'completed' ? 'ring-2 ring-gold-400 ring-offset-2' : ''
+                }`}
               >
+                {/* 里程碑完成金色流光扫描 */}
+                {milestone.status === 'completed' && (
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold-200/40 to-transparent animate-shimmer" />
+                  </div>
+                )}
                 <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-teal-500 to-gold-500" />
                 <div className="flex items-start justify-between ml-4">
                   <div className="flex-1">
@@ -300,43 +308,63 @@ export default function Progress() {
       )}
 
       {activeTab === 'achievements' && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up">
-          {progress.achievements.map((achievement, index) => (
-            <div
-              key={achievement.id}
-              className={`card p-5 text-center transition-all duration-300 hover:scale-105 ${
-                achievement.unlocked ? '' : 'opacity-40 grayscale hover:opacity-60'
-              }`}
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className={`text-5xl mb-3 transition-transform ${achievement.unlocked ? 'animate-bounce-in' : ''}`}>
-                {achievement.icon}
-              </div>
-              <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
-                achievement.unlocked 
-                  ? 'bg-gradient-to-br from-gold-100 to-amber-100' 
-                  : 'bg-gray-100'
-              }`}>
-                <Trophy size={24} className={achievement.unlocked ? 'text-gold-600' : 'text-gray-400'} />
-              </div>
-              <h3 className="font-semibold text-teal-800 mb-1">{achievement.title}</h3>
-              <p className="text-xs text-teal-500">{achievement.description}</p>
-              {achievement.unlocked && achievement.unlockedAt && (
-                <div className="mt-2 pt-2 border-t border-teal-100">
-                  <p className="text-xs text-gold-600 flex items-center justify-center gap-1">
-                    <Award size={10} />
-                    {achievement.unlockedAt} 解锁
+        <>
+          {/* 成就解锁仪式感动画 */}
+          {progress.achievements.map((achievement) => (
+            achievement.unlocked && achievement.unlockedAt && (
+              <div key={`ceremony-${achievement.id}`} className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none animate-fade-in">
+                <div className="bg-white/90 backdrop-blur-md rounded-3xl p-8 shadow-2xl border-2 border-gold-300 text-center animate-bounce-in">
+                  <div className="text-6xl mb-4">{achievement.icon}</div>
+                  <div className="w-16 h-16 rounded-full mx-auto mb-3 bg-gradient-to-br from-gold-400 to-amber-500 flex items-center justify-center shadow-lg ring-4 ring-gold-200">
+                    <Trophy size={32} className="text-white" />
+                  </div>
+                  <h3 className="font-serif text-2xl font-bold text-teal-800 mb-1">{achievement.title}</h3>
+                  <p className="text-teal-500 text-sm">{achievement.description}</p>
+                  <p className="text-gold-600 text-xs mt-2 flex items-center justify-center gap-1">
+                    <Award size={12} /> {achievement.unlockedAt} 解锁
                   </p>
                 </div>
-              )}
-              {!achievement.unlocked && (
-                <div className="mt-2 pt-2 border-t border-teal-100">
-                  <p className="text-xs text-gray-400">继续努力...</p>
-                </div>
-              )}
-            </div>
+              </div>
+            )
           ))}
-        </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in-up">
+            {progress.achievements.map((achievement, index) => (
+              <div
+                key={achievement.id}
+                className={`card p-5 text-center transition-all duration-300 hover:scale-105 ${
+                  achievement.unlocked ? '' : 'opacity-40 grayscale hover:opacity-60'
+                }`}
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className={`text-5xl mb-3 transition-transform ${achievement.unlocked ? 'animate-bounce-in' : ''}`}>
+                  {achievement.icon}
+                </div>
+                <div className={`w-12 h-12 rounded-full mx-auto mb-3 flex items-center justify-center ${
+                  achievement.unlocked 
+                    ? 'bg-gradient-to-br from-gold-100 to-amber-100' 
+                    : 'bg-gray-100'
+                }`}>
+                  <Trophy size={24} className={achievement.unlocked ? 'text-gold-600' : 'text-gray-400'} />
+                </div>
+                <h3 className="font-semibold text-teal-800 mb-1">{achievement.title}</h3>
+                <p className="text-xs text-teal-500">{achievement.description}</p>
+                {achievement.unlocked && achievement.unlockedAt && (
+                  <div className="mt-2 pt-2 border-t border-teal-100">
+                    <p className="text-xs text-gold-600 flex items-center justify-center gap-1">
+                      <Award size={10} />
+                      {achievement.unlockedAt} 解锁
+                    </p>
+                  </div>
+                )}
+                {!achievement.unlocked && (
+                  <div className="mt-2 pt-2 border-t border-teal-100">
+                    <p className="text-xs text-gray-400">继续努力...</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {activeTab === 'tasks' && completedTasks.length === progress.tasks.length && progress.tasks.length > 0 && (
