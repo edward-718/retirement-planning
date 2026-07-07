@@ -3,7 +3,7 @@ import type { CityData } from '@/types';
 import { formatMoney } from '@/utils/format';
 import { MapPin, Star, Home, Heart, Thermometer, Users, Bus, ArrowLeft, Plus, X, ChevronDown, Sparkles, Info, TrendingUp, TrendingDown } from 'lucide-react';
 import { useState } from 'react';
-import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from 'recharts';
+import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, ScatterChart, Scatter, ZAxis } from 'recharts';
 
 type SortKey = 'costOfLiving' | 'healthcare' | 'climate' | 'socialSupport' | 'transportation' | 'total';
 
@@ -302,6 +302,81 @@ export default function CitiesPage() {
             <ChevronDown size={18} className={`transition-transform ${showCompare ? 'rotate-180' : ''}`} />
           </button>
         )}
+      </div>
+
+      {/* 城市散点图（新增） */}
+      <div className="card p-6 animate-fade-in-up">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-serif text-xl font-bold text-teal-800">城市养老成本 vs 舒适度分布</h3>
+          <div className="flex items-center gap-1 text-sm text-teal-500">
+            <Info size={14} />
+            <span>气泡大小 = 社交配套评分</span>
+          </div>
+        </div>
+        <div className="h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#ccfbf1" />
+              <XAxis
+                type="number"
+                dataKey="x"
+                name="生活成本指数"
+                domain={[40, 80]}
+                stroke="#0d9488"
+                fontSize={11}
+                label={{ value: '生活成本指数（越高越便宜）', position: 'insideBottom', offset: -10, fill: '#0d9488', fontSize: 11 }}
+              />
+              <YAxis
+                type="number"
+                dataKey="y"
+                name="舒适度评分"
+                domain={[60, 100]}
+                stroke="#0d9488"
+                fontSize={11}
+                label={{ value: '舒适度评分', angle: -90, position: 'insideLeft', fill: '#0d9488', fontSize: 11 }}
+              />
+              <ZAxis type="number" dataKey="z" range={[60, 400]} />
+              <Tooltip
+                cursor={{ strokeDasharray: '3 3' }}
+                formatter={(value: number, name: string, props: any) => {
+                  if (name === 'x') return [`${value}`, '生活成本指数'];
+                  if (name === 'y') return [`${value}`, '舒适度评分'];
+                  return [value, name];
+                }}
+                contentStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                  border: '1px solid #2dd4bf',
+                  borderRadius: '12px',
+                  padding: '12px',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                }}
+              />
+              <Scatter
+                name="城市"
+                data={CITY_LIST.map(city => ({
+                  name: city.name,
+                  x: city.scores.costOfLiving,
+                  y: city.scores.climate,
+                  z: city.scores.socialSupport,
+                }))}
+                fill="#0d9488"
+                shape="circle"
+              >
+                {CITY_LIST.map((city, index) => (
+                  <circle key={index} />
+                ))}
+              </Scatter>
+            </ScatterChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {CITY_LIST.map(city => (
+            <span key={city.id} className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-teal-50 text-teal-600 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-teal-500" />
+              {city.name}
+            </span>
+          ))}
+        </div>
       </div>
 
       {showCompare && compareCities.length >= 2 && (
