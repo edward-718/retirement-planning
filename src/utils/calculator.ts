@@ -80,10 +80,13 @@ export function calculatePension(profile: UserProfile): CalculationResult {
 
 function calculateSocialSecurity(avgWage: number, years: number, base: number): number {
   if (years < 15) return 0;
+  // 防御性检查
+  if (avgWage <= 0 || base <= 0 || years <= 0) return 0;
+  
   const index = Math.min(3, base / 8000);
   const basicPension = avgWage * (1 + index) / 2 * Math.min(years, 40) * 0.01;
   const personalAccount = base * 0.08 * years * 12 / 139;
-  return Math.round(basicPension + personalAccount);
+  return Math.max(0, Math.round(basicPension + personalAccount));
 }
 
 function calculateEnterpriseAnnuityMonthly(
@@ -105,7 +108,13 @@ function calculatePersonalPensionMonthly(
 }
 
 function calculateFutureValue(pv: number, rate: number, years: number): number {
-  return pv * Math.pow(1 + rate, years);
+  // 防御性检查
+  if (pv <= 0 || years < 0) return pv;
+  if (rate < 0) return pv; // 不处理负利率情况
+  
+  const result = pv * Math.pow(1 + rate, years);
+  // 检查是否溢出
+  return isFinite(result) ? result : pv * 100; // 保守估计
 }
 
 function calculateMonthlySavings(
@@ -113,12 +122,21 @@ function calculateMonthlySavings(
   annualRate: number,
   years: number
 ): number {
+  // 防御性检查：处理无效输入
   if (years <= 0 || target <= 0) return 0;
+  
   const monthlyRate = annualRate / 12;
   const months = years * 12;
-  if (monthlyRate === 0) return Math.round(target / months);
-  const monthly = target * monthlyRate / (Math.pow(1 + monthlyRate, months) - 1);
-  return Math.round(monthly);
+  
+  // 处理零利率情况
+  if (monthlyRate === 0) return Math.max(0, Math.round(target / months));
+  
+  // 使用年金公式计算每月储蓄
+  const compoundFactor = Math.pow(1 + monthlyRate, months);
+  if (!isFinite(compoundFactor)) return Math.max(0, Math.round(target / months));
+  
+  const monthly = target * monthlyRate / (compoundFactor - 1);
+  return isFinite(monthly) ? Math.max(0, Math.round(monthly)) : 0;
 }
 
 function calculateScenario(
