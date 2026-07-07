@@ -35,22 +35,31 @@ export default function CalculatorPage() {
         if (value > 1000000) return '月收入不能超过 100 万元';
         break;
       case 'currentSavings':
-        if (value < 0) return '存款不能为负数';
+        if (value === '' || value === null || value === undefined) return null; // 可选字段
+        if (Number(value) < 0) return '存款不能为负数';
         break;
       case 'socialInsuranceYears':
-        if (localProfile.age && value > localProfile.age - 22) return '社保年限不能超过实际工作年限';
+        if (value && localProfile.age && Number(value) > localProfile.age - 22) return '社保年限不能超过实际工作年限';
+        if (value && (Number(value) < 0 || Number(value) > 50)) return '社保年限需在 0-50 年之间';
         break;
       case 'socialInsuranceBase':
-        if (value && (value < 3000 || value > 50000)) return '社保基数需在 3000-50000 元之间';
+        if (value && (Number(value) < 3000 || Number(value) > 50000)) return '社保基数需在 3000-50000 元之间';
+        break;
+      case 'enterpriseAnnuity':
+      case 'personalPension':
+        // 可选字段，只需检查非负
+        if (value && Number(value) < 0) return '金额不能为负数';
         break;
     }
     return null;
   };
 
   const handleChange = (key: keyof UserProfile, value: any) => {
-    setLocalProfile(prev => ({ ...prev, [key]: value }));
+    // 处理空字符串转为 0
+    const processedValue = value === '' ? 0 : value;
+    setLocalProfile(prev => ({ ...prev, [key]: processedValue }));
     if (touched[key]) {
-      const error = validateField(key, value);
+      const error = validateField(key, processedValue);
       setErrors(prev => ({ ...prev, [key]: error || '' }));
     }
   };
@@ -104,6 +113,8 @@ export default function CalculatorPage() {
     { step: 1, title: '基本信息', description: '年龄和所在城市' },
     { step: 2, title: '财务状况', description: '收入和储蓄' },
     { step: 3, title: '养老规划', description: '目标城市和退休计划' },
+    { step: 4, title: '补充信息', description: '社保和生活方式' },
+    { step: 5, title: '账户资产', description: '企业年金和个人养老金' },
   ];
 
   const simpleSteps = [
@@ -143,9 +154,13 @@ export default function CalculatorPage() {
         { value: 'luxury', label: LIFESTYLE_LABELS.luxury },
       ]},
     ],
+    [
+      { key: 'enterpriseAnnuity', label: '企业年金余额（选填）', type: 'number', placeholder: '0', suffix: '元' },
+      { key: 'personalPension', label: '个人养老金账户（选填）', type: 'number', placeholder: '0', suffix: '元' },
+    ],
   ];
 
-  const totalSteps = calculatorMode === 'simple' ? 3 : 4;
+  const totalSteps = calculatorMode === 'simple' ? 3 : 5;
   const currentFields = calculatorMode === 'simple' 
     ? simpleSteps[currentStep - 1] 
     : standardSteps[currentStep - 1];
@@ -206,7 +221,7 @@ export default function CalculatorPage() {
               标准模式
             </p>
             <p className="text-xs text-teal-500 flex items-center gap-1">
-              <Clock size={12} /> 约2分钟 · 更精准
+              <Clock size={12} /> 约2分钟 · 含企业年金
             </p>
           </div>
         </button>
