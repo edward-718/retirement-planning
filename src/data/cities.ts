@@ -5,7 +5,7 @@ export const CITY_LIST: CityData[] = [
     id: 'chengdu',
     name: '成都',
     province: '四川',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=chengdu%20city%20skyline%20panda%20base%20mountains%20foggy%20morning%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1568302341846-5f38f62991d3?w=640&q=80',
     scores: {
       costOfLiving: 75,
       healthcare: 82,
@@ -26,7 +26,7 @@ export const CITY_LIST: CityData[] = [
     id: 'kunming',
     name: '昆明',
     province: '云南',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=kunming%20spring%20city%20flowers%20lake%20mountains%20sunny%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1513415564515-763d91423bdd?w=640&q=80',
     scores: {
       costOfLiving: 70,
       healthcare: 72,
@@ -47,7 +47,7 @@ export const CITY_LIST: CityData[] = [
     id: 'sanya',
     name: '三亚',
     province: '海南',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=sanya%20tropical%20beach%20palm%20trees%20blue%20ocean%20sunset%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=640&q=80',
     scores: {
       costOfLiving: 45,
       healthcare: 68,
@@ -68,7 +68,7 @@ export const CITY_LIST: CityData[] = [
     id: 'hangzhou',
     name: '杭州',
     province: '浙江',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hangzhou%20west%20lake%20traditional%20chinese%20garden%20pagoda%20misty%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=640&q=80',
     scores: {
       costOfLiving: 55,
       healthcare: 88,
@@ -89,7 +89,7 @@ export const CITY_LIST: CityData[] = [
     id: 'qingdao',
     name: '青岛',
     province: '山东',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=qingdao%20coastal%20city%20european%20architecture%20beach%20beer%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=640&q=80',
     scores: {
       costOfLiving: 60,
       healthcare: 80,
@@ -110,7 +110,7 @@ export const CITY_LIST: CityData[] = [
     id: 'xian',
     name: '西安',
     province: '陕西',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=xian%20ancient%20city%20wall%20pagoda%20traditional%20chinese%20architecture%20sunset%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?w=640&q=80',
     scores: {
       costOfLiving: 72,
       healthcare: 85,
@@ -131,7 +131,7 @@ export const CITY_LIST: CityData[] = [
     id: 'xiamen',
     name: '厦门',
     province: '福建',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=xiamen%20gulangyu%20island%20colonial%20architecture%20sea%20sunset%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1548013146-72479768bada?w=640&q=80',
     scores: {
       costOfLiving: 50,
       healthcare: 78,
@@ -152,7 +152,7 @@ export const CITY_LIST: CityData[] = [
     id: 'suzhou',
     name: '苏州',
     province: '江苏',
-    image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=suzhou%20classical%20chinese%20garden%20canal%20traditional%20architecture%20misty%20photorealistic&image_size=landscape_16_9',
+    image: 'https://images.unsplash.com/photo-1523592121529-f6dde35f079e?w=640&q=80',
     scores: {
       costOfLiving: 58,
       healthcare: 85,
