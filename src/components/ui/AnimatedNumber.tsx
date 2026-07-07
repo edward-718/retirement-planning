@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, memo } from 'react';
 
 interface AnimatedNumberProps {
   value: number;
@@ -7,10 +7,10 @@ interface AnimatedNumberProps {
   className?: string;
 }
 
-export default function AnimatedNumber({
+const AnimatedNumber = memo(function AnimatedNumber({
   value,
   duration = 1000,
-  formatter = (v) => v.toLocaleString('zh-CN'),
+  formatter = (v: number) => v.toLocaleString('zh-CN'),
   className = '',
 }: AnimatedNumberProps) {
   const [displayValue, setDisplayValue] = useState(0);
@@ -57,4 +57,6 @@ export default function AnimatedNumber({
   }, [value, duration]);
 
   return <span className={className}>{formatter(displayValue)}</span>;
-}
+});
+
+export default AnimatedNumber;
