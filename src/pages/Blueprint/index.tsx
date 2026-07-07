@@ -357,36 +357,58 @@ export default function Blueprint() {
       </div>
 
       <div className="card p-6 bg-gradient-to-br from-teal-50 to-gold-50 animate-fade-in-up animate-stagger-7">
-        <h3 className="font-serif text-xl font-bold text-teal-800 mb-4">💡 AI 规划建议</h3>
-        <div className="space-y-4 text-teal-700">
-          <div className="flex gap-3 p-3 bg-white/70 rounded-xl hover:bg-white/80 transition-colors duration-300">
-            <span className="text-2xl flex-shrink-0">1️⃣</span>
-            <div>
-              <p className="font-semibold text-teal-800">每月坚持储蓄</p>
-              <p className="text-sm">建议每月存入 <span className="font-bold text-gold-600">{formatMoney(scenarioData.suggestedMonthlySavings)}</span>，占月收入约 {formatPercent(scenarioData.suggestedMonthlySavings / profile.monthlyIncome, 0)}。可设置自动定投，强制储蓄。</p>
-            </div>
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-teal-700 flex items-center justify-center shadow-md">
+            <Sparkles size={20} className="text-white" />
           </div>
-          <div className="flex gap-3 p-3 bg-white/70 rounded-xl hover:bg-white/80 transition-colors duration-300">
-            <span className="text-2xl flex-shrink-0">2️⃣</span>
-            <div>
-              <p className="font-semibold text-teal-800">合理配置资产</p>
-              <p className="text-sm">年轻时期可配置更多权益类资产，临近退休逐步转向稳健型。建议长期年化收益率目标 {scenarioOptions.find(s => s.key === scenario)?.rate}。</p>
-            </div>
+          <div>
+            <h3 className="font-serif text-xl font-bold text-teal-800">AI 规划建议</h3>
+            <p className="text-teal-500 text-xs">基于你的个人画像生成的专属方案</p>
           </div>
-          <div className="flex gap-3 p-3 bg-white/70 rounded-xl hover:bg-white/80 transition-colors duration-300">
-            <span className="text-2xl flex-shrink-0">3️⃣</span>
-            <div>
-              <p className="font-semibold text-teal-800">充分利用税优政策</p>
-              <p className="text-sm">每年缴纳个人养老金 12000 元，可享受个税抵扣，同时增加养老储备。</p>
+        </div>
+        <div className="space-y-3 text-teal-700">
+          {[
+            { num: '01', title: '每月坚持储蓄', content: <>建议每月存入 <span className="font-bold text-gold-600">{formatMoney(scenarioData.suggestedMonthlySavings)}</span>，占月收入约 {formatPercent(scenarioData.suggestedMonthlySavings / profile.monthlyIncome, 0)}。可设置自动定投，强制储蓄。</>, highlight: true },
+            { num: '02', title: '合理配置资产', content: <>年轻时期可配置更多权益类资产，临近退休逐步转向稳健型。建议长期年化收益率目标 {scenarioOptions.find(s => s.key === scenario)?.rate}。</>, highlight: false },
+            { num: '03', title: '充分利用税优政策', content: <>每年缴纳个人养老金 12000 元，可享受个税抵扣，同时增加养老储备。</>, highlight: false },
+            { num: '04', title: '每年复盘调整', content: <>收入变化、目标调整、市场波动都会影响规划，建议每年年初重新测算和调整。</>, highlight: false },
+          ].map((item) => (
+            <div key={item.num} className={`flex gap-3 p-4 rounded-xl transition-all duration-300 ${item.highlight ? 'bg-white shadow-sm border-l-4 border-gold-400' : 'bg-white/70 hover:bg-white/80'}`}>
+              <span className="text-sm font-mono font-bold text-teal-300 flex-shrink-0 w-6">{item.num}</span>
+              <div>
+                <p className="font-semibold text-teal-800 text-sm">{item.title}</p>
+                <p className="text-sm text-teal-600 mt-1 leading-relaxed">{item.content}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex gap-3 p-3 bg-white/70 rounded-xl hover:bg-white/80 transition-colors duration-300">
-            <span className="text-2xl flex-shrink-0">4️⃣</span>
-            <div>
-              <p className="font-semibold text-teal-800">每年复盘调整</p>
-              <p className="text-sm">收入变化、目标调整、市场波动都会影响规划，建议每年年初重新测算和调整。</p>
+          ))}
+        </div>
+      </div>
+
+      {/* 产品路线图（新增） */}
+      <div className="card p-6 animate-fade-in-up">
+        <h3 className="font-serif text-xl font-bold text-teal-800 mb-6 text-center">产品演进路线图</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { emoji: '🌱', title: '第一阶段', desc: 'MVP 版本\n养老金计算器 + 进度追踪', active: true },
+            { emoji: '🌿', title: '第二阶段', desc: '地点推荐系统\n成本数据库 + 舒适度评分', active: false },
+            { emoji: '🌳', title: '第三阶段', desc: '智能规划引擎\nAI 驱动的个性化建议', active: false },
+            { emoji: '🌲', title: '第四阶段', desc: '生态连接\n对接保险、理财、养老服务', active: false },
+          ].map((stage, idx) => (
+            <div key={idx} className={`p-5 rounded-2xl text-center transition-all duration-300 hover:-translate-y-1 ${
+              stage.active
+                ? 'bg-gradient-to-br from-teal-50 to-gold-50 border-2 border-teal-200 shadow-md'
+                : 'bg-white/60 border border-teal-100'
+            }`}>
+              <div className="text-3xl mb-3">{stage.emoji}</div>
+              <div className="font-bold text-teal-800 text-sm mb-2">{stage.title}</div>
+              <div className="text-xs text-teal-500 whitespace-pre-line leading-relaxed">{stage.desc}</div>
+              {stage.active && (
+                <div className="mt-3 inline-flex items-center gap-1 px-2 py-1 bg-teal-100 text-teal-700 text-xs rounded-full">
+                  <Sparkles size={10} /> 当前阶段
+                </div>
+              )}
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
