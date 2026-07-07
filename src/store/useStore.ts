@@ -53,6 +53,59 @@ interface AppState {
   completeTask: (taskId: string) => void;
 }
 
+// 成就检查函数
+function checkAchievements(
+  achievements: Achievement[],
+  profile: UserProfile,
+  tasks: Task[],
+  currentSavings: number
+): Achievement[] {
+  const today = new Date().toISOString().split('T')[0];
+  const completedTasks = tasks.filter(t => t.progress === 100);
+  const completedKnowledgeTasks = completedTasks.filter(t => t.type === 'knowledge');
+  
+  return achievements.map(achievement => {
+    if (achievement.unlocked) return achievement;
+    
+    let shouldUnlock = false;
+    
+    switch (achievement.id) {
+      // 第一桶金：储蓄达到 10 万元
+      case 'a2':
+        shouldUnlock = currentSavings >= 100000;
+        break;
+      // 城市探险家：完成 5 个探索任务（这里简化为完成探索任务）
+      case 'a3':
+        shouldUnlock = completedTasks.filter(t => t.type === 'exploration').length >= 5;
+        break;
+      // 知识达人：完成 10 个知识任务
+      case 'a4':
+        shouldUnlock = completedKnowledgeTasks.length >= 10;
+        break;
+      // 坚持不懈：连续储蓄 12 个月（模拟：完成12个储蓄任务）
+      case 'a5':
+        shouldUnlock = completedTasks.filter(t => t.type === 'savings').length >= 12;
+        break;
+      // 百万富翁：储蓄突破 100 万
+      case 'a6':
+        shouldUnlock = currentSavings >= 1000000;
+        break;
+      // 规划大师：完成标准模式测算（通过是否有企业年金或个人养老金判断）
+      case 'a7':
+        shouldUnlock = profile.enterpriseAnnuity !== undefined || profile.personalPension !== undefined;
+        break;
+      // 家庭顶梁柱：储蓄达到50万
+      case 'a8':
+        shouldUnlock = currentSavings >= 500000;
+        break;
+      default:
+        break;
+    }
+    
+    return shouldUnlock ? { ...achievement, unlocked: true, unlockedAt: today } : achievement;
+  });
+}
+
 export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
@@ -90,25 +143,47 @@ export const useStore = create<AppState>()(
       },
 
       updateTaskProgress: (taskId, progressValue) => {
-        set((state) => ({
-          progress: {
-            ...state.progress,
-            tasks: state.progress.tasks.map((t) =>
-              t.id === taskId ? { ...t, progress: progressValue } : t
-            ),
-          },
-        }));
+        set((state) => {
+          const updatedTasks = state.progress.tasks.map((t) =>
+            t.id === taskId ? { ...t, progress: progressValue } : t
+          );
+          // 检查成就解锁
+          const updatedAchievements = checkAchievements(
+            state.progress.achievements,
+            state.profile,
+            updatedTasks,
+            state.progress.currentSavings
+          );
+          return {
+            progress: {
+              ...state.progress,
+              tasks: updatedTasks,
+              achievements: updatedAchievements,
+            },
+          };
+        });
       },
 
       completeTask: (taskId) => {
-        set((state) => ({
-          progress: {
-            ...state.progress,
-            tasks: state.progress.tasks.map((t) =>
-              t.id === taskId ? { ...t, progress: 100 } : t
-            ),
-          },
-        }));
+        set((state) => {
+          const updatedTasks = state.progress.tasks.map((t) =>
+            t.id === taskId ? { ...t, progress: 100 } : t
+          );
+          // 检查成就解锁
+          const updatedAchievements = checkAchievements(
+            state.progress.achievements,
+            state.profile,
+            updatedTasks,
+            state.progress.currentSavings
+          );
+          return {
+            progress: {
+              ...state.progress,
+              tasks: updatedTasks,
+              achievements: updatedAchievements,
+            },
+          };
+        });
       },
     }),
     {
