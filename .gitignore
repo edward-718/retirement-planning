@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Upload state
+.upload-state.json
+
+# Build output
+dist/
+
+# IDE
+.trae/
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
