@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 
 interface CircularProgressProps {
   percentage: number;
@@ -8,7 +8,7 @@ interface CircularProgressProps {
   subtitle?: string;
 }
 
-export default function CircularProgress({
+function CircularProgressComponent({
   percentage,
   size = 280,
   strokeWidth = 16,
@@ -67,3 +67,5 @@ export default function CircularProgress({
     </div>
   );
 }
+
+export default memo(CircularProgressComponent);
